@@ -17,6 +17,9 @@
 
 
 <div id="main-content">
+<?php if(isset($file)) {?>
+ File generated as <?php echo $file;?> 
+<?php } else { ?>
 <form name="coupons" method="post" action="printCoupon">
 <table width="450px">
 
@@ -46,6 +49,7 @@
 </tr>
 </table>
 </form>
+<?php }?>
 
 </div>
 
@@ -54,14 +58,14 @@ $(function() {
 	$( "#datepicker" ).datepicker(
 			{
 				inline: true,
-				dateFormat: 'yy-m-d'
+				dateFormat: 'yy-mm-dd'
 				
 			});
 	
 	$( "#datepicker1" ).datepicker(
 			{
 				inline: true,
-				dateFormat: 'yy-m-d'
+				dateFormat: 'yy-mm-dd'
 			});
 	//hover states on the static widgets
 	$('#dialog_link, ul#icons li').hover(

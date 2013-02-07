@@ -5,7 +5,13 @@ $this->breadcrumbs=array(
 
 
 <div id="main-content">
-<form name="coupons" method="post" action="coupon">
+<?php 
+if(isset($error))
+{
+	echo "Somethig went wrong!";
+}
+?>
+<form name="coupons" method="post" action="/coupon/generate">
 <table width="450px">
 <tr>
  <td valign="top">
@@ -65,13 +71,13 @@ $(function() {
 	$( "#datepicker" ).datepicker(
 			{
 				inline: true,
-				dateFormat: 'yy-m-d'
+				dateFormat: 'yy-mm-dd'
 			});
 	
 	$( "#datepicker1" ).datepicker(
 			{
 				inline: true,
-				dateFormat: 'yy-m-d'
+				dateFormat: 'yy-mm-dd'
 			});
 	//hover states on the static widgets
 	$('#dialog_link, ul#icons li').hover(
