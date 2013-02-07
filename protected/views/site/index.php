@@ -10,6 +10,7 @@ if(isset($user))
 ?>
 <a href="<?php echo Utilities::createAbsoluteUrl('coupons','index'); ?>" >Coupon Generation</a> </br>
 <a href="<?php echo Utilities::createAbsoluteUrl('coupons','print'); ?>" >Coupon Print</a> </br>
+<a href="<?php echo Utilities::createAbsoluteUrl('coupon','index'); ?>" >Coupon Details</a> </br>
 <a href="<?php echo Utilities::createAbsoluteUrl('country','index'); ?>" >Country</a> </br>
 <a href="<?php echo Utilities::createAbsoluteUrl('states','index'); ?>" >States</a> </br>
 <a href="<?php echo Utilities::createAbsoluteUrl('places','index'); ?>" >Places</a> </br>

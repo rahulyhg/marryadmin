@@ -11,7 +11,7 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'couponCode'); ?>
-		<?php echo $form->textField($model,'couponCode',array('size'=>15,'maxlength'=>15)); ?>
+		<?php echo $form->textField($model,'couponCode',array('readOnly'=>true,'size'=>15,'maxlength'=>15)); ?>
 		<?php echo $form->error($model,'couponCode'); ?>
 	</div>
 
@@ -23,13 +23,13 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'startDate'); ?>
-		<?php echo $form->textField($model,'startDate'); ?>
+		<?php echo $form->textField($model,'startDate',array('readOnly'=>true,'id'=>'datepicker')); ?>
 		<?php echo $form->error($model,'startDate'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'endDate'); ?>
-		<?php echo $form->textField($model,'endDate'); ?>
+		<?php echo $form->textField($model,'endDate',array('readOnly'=>true,'id'=>'datepicker1')); ?>
 		<?php echo $form->error($model,'endDate'); ?>
 	</div>
 
@@ -53,19 +53,19 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'batchNo'); ?>
-		<?php echo $form->textField($model,'batchNo',array('size'=>10,'maxlength'=>10)); ?>
+		<?php echo $form->textField($model,'batchNo',array('readOnly'=>true,'size'=>10,'maxlength'=>10)); ?>
 		<?php echo $form->error($model,'batchNo'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'serialNo'); ?>
-		<?php echo $form->textField($model,'serialNo'); ?>
+		<?php echo $form->textField($model,'serialNo',array('readOnly'=>true)); ?>
 		<?php echo $form->error($model,'serialNo'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'couponId'); ?>
-		<?php echo $form->textField($model,'couponId'); ?>
+		<?php echo $form->textField($model,'couponId',array('readOnly'=>true)); ?>
 		<?php echo $form->error($model,'couponId'); ?>
 	</div>
 
@@ -82,3 +82,25 @@
 <?php $this->endWidget(); ?>
 
 </div><!-- form -->
+<script>
+$(function() {
+	$( "#datepicker" ).datepicker(
+			{
+				inline: true,
+				dateFormat: 'yy-mm-dd'
+				
+			});
+	
+	$( "#datepicker1" ).datepicker(
+			{
+				inline: true,
+				dateFormat: 'yy-mm-dd'
+			});
+	//hover states on the static widgets
+	$('#dialog_link, ul#icons li').hover(
+		function() { $(this).addClass('ui-state-hover'); },
+		function() { $(this).removeClass('ui-state-hover'); }
+	);
+});
+</script>
+
