@@ -73,14 +73,11 @@ class Coupon extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
 			'couponCode' => 'Coupon Code',
 			'creationDate' => 'Creation Date',
 			'startDate' => 'Start Date',
 			'endDate' => 'End Date',
 			'validity' => 'Validity',
-			'status' => 'Status',
-			'isUsed' => 'Is Used',
 			'batchNo' => 'Batch No',
 			'serialNo' => 'Serial No',
 			'couponId' => 'Coupon',

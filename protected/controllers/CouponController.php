@@ -85,13 +85,17 @@ class CouponController extends Controller
 	{
 		if(isset($_POST['startDate']) && !empty($_POST['startDate']))
 		{
-				$condition = "startDate >= {$_POST['startDate']} and endDate <= {$_POST['endDate']} and isUsed != 1";
+				$start = $_POST['startDate'];
+				$end = $_POST['endDate'];
+				$condition = "startDate >= '{$start}' and endDate <= '{$end}' and isUsed != 1";
 				$data= Coupon::model()->findAll(array('condition'=>$condition,
 				'order'=> 'serialNo DESC' ));
 				$file = $this->generateCSV($data);
+				$this->render('printCoupon',array('file'=>$file ));
 					
 		}
-			$this->render('printCoupon',array('file'=>$file ));
+		else 
+		$this->render('printCoupon');
 		}
 		
 			
@@ -160,11 +164,18 @@ class CouponController extends Controller
 			foreach ($data as $row) {
 				if($column)
 				{
-					$columns = array_keys($row);
+					$columns = array_values(Coupon::model()->attributeLabels());
 					fputcsv($fp, $columns);
 				}
 				$column = false;
-				fputcsv($fp, $row);
+				fputcsv($fp, array($row->couponCode,$row->creationDate,
+			$row->startDate,
+			$row->endDate,
+			$row->validity,
+			$row->batchNo,
+			$row->serialNo,
+			$row->couponId,
+			$row->couponType));
 			}
 			fclose($fp);
 			return $fileName;

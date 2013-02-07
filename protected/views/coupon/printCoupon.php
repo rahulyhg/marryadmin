@@ -14,13 +14,16 @@
 *  @version <Revision>
 */
 ?>
-
+<?php
+$this->breadcrumbs=array(
+	'Coupon',
+);?>
 
 <div id="main-content">
 <?php if(isset($file)) {?>
  File generated as <?php echo $file;?> 
 <?php } else { ?>
-<form name="coupons" method="post" action="printCoupon">
+<form name="coupons" id="coupons" method="post" action="/coupon/export">
 <table width="450px">
 
  
@@ -29,7 +32,7 @@
   <label for="startDate">Start Date*</label>
  </td>
  <td valign="top">
-  <input  type="text" id="datepicker" name="startDate" readonly="true"  size="30">
+  <input  type="text" id="datepicker" class="validate[required]"   name="startDate" readonly="true"  size="30">
  </td>
 </tr>
 <tr>
@@ -37,7 +40,7 @@
   <label for="endDate">End Date*</label>
  </td>
  <td valign="top">
-  <input  type="text" id="datepicker1"  name="endDate" readonly="true" maxlength="80" size="30">
+  <input  type="text" id="datepicker1" class="validate[required]"  name="endDate" readonly="true" maxlength="80" size="30">
  </td>
  
 </tr>
@@ -54,6 +57,9 @@
 </div>
 
 <script>
+$(document).ready(function(){
+$("#coupons").validationEngine('attach');
+});
 $(function() {
 	$( "#datepicker" ).datepicker(
 			{
