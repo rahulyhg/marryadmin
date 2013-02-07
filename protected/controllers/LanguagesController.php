@@ -1,6 +1,6 @@
 <?php
 
-class CountryController extends Controller
+class LanguagesController extends Controller
 {
 public function beforeAction()
 	{
@@ -70,16 +70,16 @@ public function beforeAction()
 	 */
 	public function actionCreate()
 	{
-		$model=new Country;
+		$model=new Languages;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Country']))
+		if(isset($_POST['Languages']))
 		{
-			$model->attributes=$_POST['Country'];
+			$model->attributes=$_POST['Languages'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->countryId));
+				$this->redirect(array('view','id'=>$model->languageId));
 		}
 
 		$this->render('create',array(
@@ -99,11 +99,11 @@ public function beforeAction()
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Country']))
+		if(isset($_POST['Languages']))
 		{
-			$model->attributes=$_POST['Country'];
+			$model->attributes=$_POST['Languages'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->countryId));
+				$this->redirect(array('view','id'=>$model->languageId));
 		}
 
 		$this->render('update',array(
@@ -136,7 +136,7 @@ public function beforeAction()
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Country');
+		$dataProvider=new CActiveDataProvider('Languages');
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
@@ -147,10 +147,10 @@ public function beforeAction()
 	 */
 	public function actionAdmin()
 	{
-		$model=new Country('search');
+		$model=new Languages('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Country']))
-			$model->attributes=$_GET['Country'];
+		if(isset($_GET['Languages']))
+			$model->attributes=$_GET['Languages'];
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -164,7 +164,7 @@ public function beforeAction()
 	 */
 	public function loadModel($id)
 	{
-		$model=Country::model()->findByPk($id);
+		$model=Languages::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -176,7 +176,7 @@ public function beforeAction()
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='country-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='languages-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();

@@ -1,6 +1,6 @@
 <?php
 
-class CountryController extends Controller
+class EducationMasterController extends Controller
 {
 public function beforeAction()
 	{
@@ -70,16 +70,16 @@ public function beforeAction()
 	 */
 	public function actionCreate()
 	{
-		$model=new Country;
+		$model=new EducationMaster;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Country']))
+		if(isset($_POST['EducationMaster']))
 		{
-			$model->attributes=$_POST['Country'];
+			$model->attributes=$_POST['EducationMaster'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->countryId));
+				$this->redirect(array('view','id'=>$model->educationId));
 		}
 
 		$this->render('create',array(
@@ -99,11 +99,11 @@ public function beforeAction()
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Country']))
+		if(isset($_POST['EducationMaster']))
 		{
-			$model->attributes=$_POST['Country'];
+			$model->attributes=$_POST['EducationMaster'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->countryId));
+				$this->redirect(array('view','id'=>$model->educationId));
 		}
 
 		$this->render('update',array(
@@ -136,7 +136,7 @@ public function beforeAction()
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Country');
+		$dataProvider=new CActiveDataProvider('EducationMaster');
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
@@ -147,10 +147,10 @@ public function beforeAction()
 	 */
 	public function actionAdmin()
 	{
-		$model=new Country('search');
+		$model=new EducationMaster('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Country']))
-			$model->attributes=$_GET['Country'];
+		if(isset($_GET['EducationMaster']))
+			$model->attributes=$_GET['EducationMaster'];
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -164,7 +164,7 @@ public function beforeAction()
 	 */
 	public function loadModel($id)
 	{
-		$model=Country::model()->findByPk($id);
+		$model=EducationMaster::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -176,7 +176,7 @@ public function beforeAction()
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='country-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='education-master-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();

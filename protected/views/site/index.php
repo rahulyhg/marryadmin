@@ -14,6 +14,10 @@ if(isset($user))
 <a href="<?php echo Utilities::createAbsoluteUrl('states','index'); ?>" >States</a> </br>
 <a href="<?php echo Utilities::createAbsoluteUrl('places','index'); ?>" >Places</a> </br>
 <a href="<?php echo Utilities::createAbsoluteUrl('signsmaster','index'); ?>" >Sign</a> </br>
+<a href="<?php echo Utilities::createAbsoluteUrl('languages','index'); ?>" >Languages</a> </br>
+<a href="<?php echo Utilities::createAbsoluteUrl('occupationmaster','index'); ?>" >Occupation</a> </br>
+<a href="<?php echo Utilities::createAbsoluteUrl('educationmaster','index'); ?>" >Education</a> </br>
+<a href="<?php echo Utilities::createAbsoluteUrl('signsmaster','index'); ?>" >Sign</a> </br>
 
 <?php 	
 }
