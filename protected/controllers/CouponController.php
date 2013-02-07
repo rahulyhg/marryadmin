@@ -2,17 +2,13 @@
 
 class CouponController extends Controller
 {
-	public function beforeAction()
-	{
-		$user = Yii::app()->session->get('user');
-		if(!isset($user)) {
-			$this->redirect(Yii::app()->user->loginUrl);
-			return false;
-		}
-		return true;
-	}
-	
-/**
+	/**
+	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
+	 * using two-column layout. See 'protected/views/layouts/column2.php'.
+	 */
+	public $layout='//layouts/column2';
+
+	/**
 	 * @return array action filters
 	 */
 	public function filters()
@@ -31,12 +27,16 @@ class CouponController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('generate','index'),
-				'users'=>array('admin'),
+				'actions'=>array('index','view'),
+				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('print','export'),
-				'users'=>array('@'),
+				'actions'=>array('create','update'),
+				'users'=>array('admin'),
+			),
+			array('allow', // allow admin user to perform 'admin' and 'delete' actions
+				'actions'=>array('admin','delete'),
+				'users'=>array('admin'),
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
@@ -44,173 +44,133 @@ class CouponController extends Controller
 		);
 	}
 
-	public function actionIndex()
+	/**
+	 * Displays a particular model.
+	 * @param integer $id the ID of the model to be displayed
+	 */
+	public function actionView($id)
 	{
-		$this->render('index');
+		$this->render('view',array(
+			'model'=>$this->loadModel($id),
+		));
 	}
 
-	public function actionGenerate()
+	/**
+	 * Creates a new model.
+	 * If creation is successful, the browser will be redirected to the 'view' page.
+	 */
+	public function actionCreate()
 	{
-		$user = Yii::app()->session->get('user');
-		if(isset($_POST['count']) && !empty($_POST['count']))
+		$model=new Coupon;
+
+		// Uncomment the following line if AJAX validation is needed
+		// $this->performAjaxValidation($model);
+
+		if(isset($_POST['Coupon']))
 		{
-			$count  = intval($_POST['count']);
-			$loop = $count/10;
-			$connection=Yii::app()->db;
-			try{
-				$transaction=$connection->beginTransaction();
-				for ($i = 0; $i < $loop; $i++) {
-					$batchNumber = $this->generateBatchNumber();
-					$serialNumber = $this->generateRandumSerialNumber();
+			$model->attributes=$_POST['Coupon'];
+			if($model->save())
+				$this->redirect(array('view','id'=>$model->id));
+		}
 
-					for ($i = 0; $i < 10; $i++) {
-			$coupon = new Coupon();
-	    	$coupon->couponCode = $this->createCouponCode();
-	    	$coupon->batchNo = $batchNumber;
-	    	$coupon->serialNo = $serialNumber;
-	    	$coupon->creationDate = new CDbExpression('NOW()');
-	    	$coupon->startDate = $_POST['startDate'];
-	    	$coupon->endDate = $_POST['endDate'];
-	    	$coupon->couponId = $serialNumber.$i;
-	    	if(isset($_POST['type']) && $_POST['type'] == 'normal')
-	    	{
-	    		$coupon->validity = 0;
-	    		$coupon->couponType = 'normal';
-	    	}
-	    	else
-	    	{
+		$this->render('create',array(
+			'model'=>$model,
+		));
+	}
 
-	    		$coupon->validity = isset($_POST['validity']) ? $_POST['validity'] : 0;
-	    		$coupon->couponType = 'promo';
-	    	}
-	    	$coupon->save();
-	    }
-	    	$couponLog = new CouponLogs();
-	    	$couponLog->batchNo = $batchNumber;
-	    	$couponLog->creationTime = new CDbExpression('NOW()'); 
-	    	$couponLog->adminUserId = $user->adminId;
-	    	$couponLog->save(); 
-	    	
-				}
-				$transaction->commit();
-			}
-			catch (Exception $e){
-				$transaction->rollback();
-				$this->forward('index',array('error'=>true));
-				return;
-			}
-		$this->render('success');
+	/**
+	 * Updates a particular model.
+	 * If update is successful, the browser will be redirected to the 'view' page.
+	 * @param integer $id the ID of the model to be updated
+	 */
+	public function actionUpdate($id)
+	{
+		$model=$this->loadModel($id);
+
+		// Uncomment the following line if AJAX validation is needed
+		// $this->performAjaxValidation($model);
+
+		if(isset($_POST['Coupon']))
+		{
+			$model->attributes=$_POST['Coupon'];
+			if($model->save())
+				$this->redirect(array('view','id'=>$model->id));
+		}
+
+		$this->render('update',array(
+			'model'=>$model,
+		));
+	}
+
+	/**
+	 * Deletes a particular model.
+	 * If deletion is successful, the browser will be redirected to the 'admin' page.
+	 * @param integer $id the ID of the model to be deleted
+	 */
+	public function actionDelete($id)
+	{
+		if(Yii::app()->request->isPostRequest)
+		{
+			// we only allow deletion via POST request
+			$this->loadModel($id)->delete();
+
+			// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
+			if(!isset($_GET['ajax']))
+				$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
 		}
 		else
-		{
-			$this->render('index');
-		}
+			throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
 	}
 
-	public function actionPrint()
+	/**
+	 * Lists all models.
+	 */
+	public function actionIndex()
 	{
-		$this->render('printCoupon');
+		$dataProvider=new CActiveDataProvider('Coupon');
+		$this->render('index',array(
+			'dataProvider'=>$dataProvider,
+		));
 	}
 
-		
-	public function actionExport()
+	/**
+	 * Manages all models.
+	 */
+	public function actionAdmin()
 	{
-		if(isset($_POST['startDate']) && !empty($_POST['startDate']))
-		{
-				$start = $_POST['startDate'];
-				$end = $_POST['endDate'];
-				$condition = "startDate >= '{$start}' and endDate <= '{$end}' and isUsed != 1";
-				$data= Coupon::model()->findAll(array('condition'=>$condition,
-				'order'=> 'serialNo DESC' ));
-				$file = $this->generateCSV($data);
-				$this->render('printCoupon',array('file'=>$file ));
-					
-		}
-		else 
-		$this->render('printCoupon');
-		}
-		
-			
-		private function createCouponCode() {
-			$chars = "ABCDEFGHIJKLMNPQRSTUVWXYZ123456789";
-			srand((double)microtime()*1000000);
-			$i = 0;
-			$code = '' ;
-			while ($i < 15)
-			{
-				$num = rand() % 33;
-				$tmp = substr($chars, $num, 1);
-				$code = $code . $tmp;
-				$i++;
-			}
-			return $code;
-		}
+		$model=new Coupon('search');
+		$model->unsetAttributes();  // clear any default values
+		if(isset($_GET['Coupon']))
+			$model->attributes=$_GET['Coupon'];
 
-		private function generateCouponCodeData($_POST)
-		{
-			$dataArray = array();
-			$batchNumber = $this->generateBatchNumber();
-			$serialNumber = $this->generateRandumSerialNumber();
-			for ($i = 0; $i < 10; $i++) {
-				$dataArray[$i]['couponCode'] = $this->createCouponCode();
-				$dataArray[$i]['batchNumber'] = $batchNumber;
-				$dataArray[$i]['serialNumber'] = $serialNumber;
-				$dataArray[$i]['startDate'] = $_POST['startDate'];
-				$dataArray[$i]['endDate'] = $_POST['endDate'];
-				$dataArray[$i]['couponId'] = $serialNumber.$i;
-				if(isset($_POST['type']) && $_POST['type'] == 'normal')
-				{
-					$dataArray[$i]['validity'] = 0;
-					$dataArray[$i]['couponType'] = 'normal';
-				}
-				else
-				{
-
-					$dataArray[$i]['validity'] = isset($_POST['validity']) ? $_POST['validity'] : 0;
-					$dataArray[$i]['couponType'] = 'promo';
-				}
-			}
-			return $dataArray;
-		}
-
-		private function generateBatchNumber()
-		{
-			return date('dmY');
-		}
-
-		private function generateRandumSerialNumber()
-		{
-			$chars = "0123456789";
-			$res = "";
-			for ($i = 0; $i < 8; $i++) {
-				$res .= $chars[mt_rand(0, strlen($chars)-1)];
-			}
-			return $res;
-		}
-
-		public function generateCSV($data)
-		{
-			$fileName = date('j-n-Y_i_s');
-			$fp = fopen("{$fileName}.csv", 'w');
-			$column = true;
-			foreach ($data as $row) {
-				if($column)
-				{
-					$columns = array_values(Coupon::model()->attributeLabels());
-					fputcsv($fp, $columns);
-				}
-				$column = false;
-				fputcsv($fp, array($row->couponCode,$row->creationDate,
-			$row->startDate,
-			$row->endDate,
-			$row->validity,
-			$row->batchNo,
-			$row->serialNo,
-			$row->couponId,
-			$row->couponType));
-			}
-			fclose($fp);
-			return $fileName;
-		}
-			
+		$this->render('admin',array(
+			'model'=>$model,
+		));
 	}
+
+	/**
+	 * Returns the data model based on the primary key given in the GET variable.
+	 * If the data model is not found, an HTTP exception will be raised.
+	 * @param integer the ID of the model to be loaded
+	 */
+	public function loadModel($id)
+	{
+		$model=Coupon::model()->findByPk($id);
+		if($model===null)
+			throw new CHttpException(404,'The requested page does not exist.');
+		return $model;
+	}
+
+	/**
+	 * Performs the AJAX validation.
+	 * @param CModel the model to be validated
+	 */
+	protected function performAjaxValidation($model)
+	{
+		if(isset($_POST['ajax']) && $_POST['ajax']==='coupon-form')
+		{
+			echo CActiveForm::validate($model);
+			Yii::app()->end();
+		}
+	}
+}
