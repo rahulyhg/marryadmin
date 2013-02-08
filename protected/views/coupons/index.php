@@ -11,7 +11,7 @@ if(isset($error))
 	echo "Somethig went wrong!";
 }
 ?>
-<form name="coupons" id="coupons"  method="post" action="/coupon/generate">
+<form name="coupons" id="coupons"  method="post" action="/coupons/generate">
 <table width="450px">
 <tr>
  <td valign="top">

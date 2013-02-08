@@ -23,7 +23,7 @@ $this->breadcrumbs=array(
 <?php if(isset($file)) {?>
  File generated as <?php echo $file;?> 
 <?php } else { ?>
-<form name="coupons" id="coupons" method="post" action="/coupon/export">
+<form name="coupons" id="coupons" method="post" action="/coupons/export">
 <table width="450px">
 
  

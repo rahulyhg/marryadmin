@@ -122,7 +122,7 @@ class CouponsController extends Controller
 				$condition = "startDate >= '{$start}' and endDate <= '{$end}' and isUsed != 1";
 				$data= Coupon::model()->findAll(array('condition'=>$condition,
 				'order'=> 'serialNo DESC' ));
-				$file = $this->generateCSV($data);
+				$this->generateCSV($data);
 				$this->render('printCoupon',array('file'=>$file ));
 					
 		}
@@ -210,7 +210,12 @@ class CouponsController extends Controller
 			$row->couponType));
 			}
 			fclose($fp);
-			return $fileName;
+			/*			 Yii::app()->request->xSendFile("{$fileName}.csv",array(
+			       'saveName'=>"coupon.csv",
+			       'mimeType'=>'text/csv',
+			       'terminate'=>true,
+			   )); */
+
 		}
 			
 	}
