@@ -26,6 +26,7 @@ if(isset($user))
 <a href="<?php echo Utilities::createAbsoluteUrl('userpersonal','index'); ?>" >User Personal</a> </br>
 <a href="<?php echo Utilities::createAbsoluteUrl('payment','index'); ?>" >Payment </a> </br>
 <a href="<?php echo Utilities::createAbsoluteUrl('familyprofile','index'); ?>" >Family Profile </a> </br>
+<a href="<?php echo Utilities::createAbsoluteUrl('feedback','index'); ?>" >Feedback</a> </br>
 
 <?php 	
 }
